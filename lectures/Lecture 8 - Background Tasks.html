@@ -1,0 +1,628 @@
+<html>
+	<head>
+		<title>CS 193A - Fragments</title>
+		<link rel="stylesheet" href="highlightjs/styles/default.css" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/highlightjs/styles/default.css">
+		<link rel="stylesheet" href="reveal/css/reveal.css" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/reveal/css/reveal.css">
+		<link rel="stylesheet" href="reveal/css/theme/white.css" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/reveal/css/theme/white.css">
+		<link rel="stylesheet" href="cs193a-slides.css" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/cs193a-slides.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+<!-- BEGIN SLIDES AREA -->
+
+<section class="titleslide">
+	<h1>CS 455</h1>
+
+	<p>Backgound Operations</p>
+</section>
+
+<section>
+	<h1>Services</h1>
+
+	<ul>
+		<li>A Service is an application component that can perform long-running operations in the background. It does not provide a user interface
+		<ul>
+			<li>Example: Google Play Music plays the music using a service.
+			<li>Example: Web browser runs a downloader service to retrieve a file.
+			
+			<br />
+			<li>Services are useful for long-running tasks, and/or providing functionality that can be used by other applications.
+			
+		</ul>
+			
+	</ul>
+	
+	<div class="figureshorizontal">
+		<img width="200" height="250" src="images/music-play.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/layout-folders-wide.png" alt="figure" />
+		<img src="images/download-service.jpg" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/layout-folders-wide.png" alt="figure" />
+	</div>
+		
+</section>
+
+<section>
+	<h1>Types of Services</h1>
+		<ul>
+			<li>There three types of services
+			<ul>
+				<li>Started Service
+					<ul>
+						<li>Foreground Service
+							<ul>
+								<li>Foreground service performs some operation that is noticeable to the user
+								<li>For example, an audio app would use a foreground service to play an audio track
+								<li>Foreground services must display a Notification
+							</ul>
+						<li>Background Service
+							<ul>
+								<li>Background service performs an operation that isn't directly noticed by the user
+								<li>For example, if an app used a service to compact its storage, that would usually be a background service.
+							</ul>							
+					</ul>
+				<li>Bound Service				
+					<ul>
+						<li>A service is bound when an application component binds to it by calling bindService().
+						<li>A bound service offers a client-server interface that allows components to interact with the service, send requests, receive results, and even do so across processes with interprocess communication (IPC).
+						<li>A bound service runs only as long as another application component is bound to it.
+					</ul>
+			</ul>
+		</ul>
+</section>
+
+<section>
+	<h1>Service Lifecycle</h1>
+	
+	<div class="figuresright">
+		<img width="100%" height="550" src="images/service-lifecycle.jpg" alt="figure" />
+	</div>
+	
+	<ul>
+		<li>A service is started by an app's activity using an intent
+		<li>Service operation modes:
+			<ul>
+				<li><b>start:</b> The service keeps running until it is manually stopped.
+						
+					<ul>
+						<li>we'll use this one
+					</ul>
+				
+				<li><b>bind:</b> The service keeps running until no "bound" apps are left.
+				
+				<li>Services have similar methods to activities for lifecycle events.
+					<ul>						
+						<li><code>onCreate, onDestroy</code>
+					</ul>
+			</ul>
+	</ul>
+</section>
+
+<section>
+	<h1>Adding Service in Android Studio</h1>
+	
+	<ul>
+		<li>Right-click your project's Java package
+		<li>click New → Service → Service			
+	</ul>
+	
+	<div class="figure">
+		<img height="450" width="70%" src="images/androidstudio-new-service.png"  alt="figure" />
+	</div>
+</section>
+
+<section>
+	<h1>Service Class Template</h1>
+	<pre><code class="java">
+	public class ServiceClassName extends Service {
+		/* this method handles a single incoming request */
+		@Override
+		public int onStartCommand(Intent intent, int flags, int id) {
+			// unpack any parameters that were passed to us
+			String value1 = intent.getStringExtra("key1");
+			String value2 = intent.getStringExtra("key2");
+			// do the work that the service needs to do ...
+			return START_STICKY; // stay running
+		}
+		@Override
+		public IBinder onBind(Intent intent) {
+			return null; // disable binding
+		}
+	}
+	</code></pre>
+</section>
+
+<section>
+	<h1>AndroidManifest.xml Changes</h1>
+	
+	<ul>
+		<li>To allow your app to use the service, add the following to your app's AndroidManifest.xml configuration:
+		<li>(Android Studio does this for you if you use the New Service option)
+		
+			<ul>
+				<li>the exported attribute signifies whether other apps are also allowed to use the service (true=yes, false=no)
+				<li>note that you must write a dot ( . ) before the class name below!				
+				<li>A Service runs on the main thread of the calling Component's process by default.
+			</ul>
+	</ul>
+	
+	<pre><code class="xml">
+&lt;application ...&gt;
+	&lt;service
+		android:name="<b>.ServiceClassName</b>"
+		android:enabled="true"
+		android:process = "name of separate process"
+		android:exported="false" /&gt;
+	</code></pre>
+</section>
+
+<section>
+	<h1>
+		Starting a service		
+	</h1>
+	
+	<ul>
+		<li>In your Activity class:
+	</ul>
+	
+	<pre><code class="java">
+Intent intent = new Intent(this, <em>ServiceClassName.class</em>);
+intent.putExtra("key1", "value1");
+intent.putExtra("key2", "value2");
+<em>startService(intent)</em>; // not startActivity!
+</code></pre>
+
+	<ul>
+		<li>or if the same code is launched from a fragment:
+	</ul>
+	<pre><code class="java">
+	Intent intent = new Intent(getActivity(),ServiceClassName.class);</code></pre>
+...	
+</section>
+
+<section>
+	<h1>Intent Actions</h1>
+	
+	<ul>
+		<li>Often a service has several "actions" or commands it can perform.
+			<ul>
+				<li>Example: A music player service can play, stop, pause, ...
+				<li>Example: A chat service can send, receive, ...
+			</ul>
+		
+		<li>Android implements this with set/getAction methods in Intent.
+			<ul>
+				<li>In your Activity class:
+					<pre><code class="java">
+Intent intent = new Intent(this, ServiceClassName.class);
+intent.setAction("action");
+intent.putExtra("key1", "value1");
+startService(intent);
+	</code></pre>
+	
+				<li>In your Service class:
+				<pre><code class="java">
+String action = intent.getAction();
+if (action.equals("action")) { ... }
+	</code></pre>
+			</ul>			
+	</ul>	
+	
+</section>
+
+<section>
+	<h1>BroadCasting the results</h1>
+	
+	<ul>
+		<li>When a service has completed a task, it can notify the app by "sending a broadcast" which the app can listen for:
+			<ul>
+				<li>As before, set an action in the intent to distinguish different kinds of results.
+				<pre><code class="java">
+public class ServiceClassName extends Service {
+	@Override
+	public int onStartCommand(Intent tent, int flags, int id) {
+	// do the work that the service needs to do ...
+	...
+	// broadcast that the work is done
+	Intent done = new Intent();
+	done.setAction("action");
+	done.putExtra("key1", value1); ...
+	<em>sendBroadcast(done);</em>
+	return START_STICKY; // stay running
+}
+				</code></pre>
+			</ul>
+	</ul>
+		
+</section>
+
+<section>
+	<h1>Receiving a broadcast</h1>
+	
+	<ul>
+		<li>Your activity can hear broadcasts using a BroadcastReceiver
+			<ul>
+				<li>Extend BroadcastReceiver with the code to handle the message.
+				<li>Any extra parameters in the message come from the service's intent.
+			</ul>
+	</ul>
+	
+	<pre><code class="java">
+public class ActivityClassName extends Activity {
+	...
+	private class ReceiverClassName extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// handle the received broadcast message
+			...
+		}
+	}
+}
+	</pre></code>
+</section>
+
+<section>
+	<h1>Listening for broadcasts</h1>
+	
+	<ul>
+		<li>Set up your activity to be notified when certain broadcast actions occur.
+		<ul>
+			<li>You must pass an intent filter specifying the action(s) of interest.
+		</ul>
+	</ul>
+	
+	<pre><code class="java">
+public class ActivityClassName extends Activity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		...
+		<em>IntentFilter filter = new IntentFilter();</em>
+		<em>filter.addAction("action");</em>
+		<em>registerReceiver(new ReceiverClassName(), filter);</em>
+	}
+}
+
+</code></pre>
+</section>
+
+<section>
+	<h1>Services and threading</h1>
+	
+	<!--div class="figuresright">
+		<img src="images/fragment-lifecycle-2.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/fragment-lifecycle-2.png" alt="figure" />
+	</div-->
+	
+	<ul>
+		<li>By default, a service lives in the same process and thread as the app that created it.
+		<ul>
+			<li>This is not ideal for long-running tasks.
+			<li>If the service is busy, the app's UI will freeze up.
+			<div class="figuresright">
+				<img src="images/services-thread-ui-lockup.png"  alt="figure" />
+			</div>
+			<li>Example: If the Downloader app at right tries to download a large/slow file, the radio buttons and other UI elements will not respond during the download.
+		</ul>
+		<li>To make the service and app more independent and responsive, the service should handle tasks in threads.
+			
+	</ul>
+</section>
+
+<section>
+	<h1>Fragment life cycle</h1>
+	
+	<div class="figure">
+		<img src="images/fragment-lifecycle-3.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/fragment-lifecycle-3.png" alt="figure" style="height: 15em" />
+	</div>
+</section>
+
+<section>
+	<h1>Fragment template</h1>
+	
+	<pre><code class="java">
+public class <var>Name</var> extends Fragment {
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			ViewGroup vg, Bundle bundle) {
+		// load the GUI layout from the XML
+		return inflater.inflate(R.layout.id, vg, false);
+	}
+
+	public void onActivityCreated(Bundle savedState) {
+		super.onActivityCreated(savedState);
+		// ... any other GUI initialization needed
+	}
+
+	// any other code (e.g. event-handling)
+}
+</code></pre>
+</section>
+
+<section>
+	<h1>Fragment vs. Activity</h1>
+	
+	<ul>
+		<li>Many <strong>activity methods</strong> aren't present in the fragment.
+			<ul>
+				<li>But call <code>getActivity</code> to access the activity the fragment is in.
+				
+				<pre><code class="java">
+<strike>Button b = (Button) findViewById(R.id.but);</strike>
+Button b = (Button) <em>getActivity()</em>.findViewById(R.id.but);
+</code></pre>
+				<li>Sometimes also use <code>getView</code> to refer to the activity's layout
+			</ul>
+		
+		<li><strong>Event handlers</strong> cannot be attached in the XML any more.  :-(
+			<ul>
+				<li>Must be attached in Java code instead.
+			</ul>
+		
+		<li><strong>Passing information</strong> to a fragment (via Intents/Bundles) is trickier.
+			<ul>
+				<li>The fragment must ask its enclosing activity for the information.
+			</ul>
+		
+		<li><strong>Fragment initialization</strong> code is different.
+			<ul>
+				<li>Typically move <code>onCreate</code> code to <code>onActivityCreated</code>.
+			</ul>
+	</ul>
+</section>
+
+<section>
+	<h1>Fragment onClick listener</h1>
+	
+	<ul>
+		<li>Activity:
+			<pre><code class="xml">
+<strike>&lt;Button android:id=&quot;@+id/b1&quot;</strike>
+		<strike>android:onClick=&quot;onClickB1&quot; ... /&gt;</strike>
+</code></pre>
+
+		<li>Fragment:
+			<pre><code class="xml">
+&lt;!-- in fragment's XML layout file --&gt;
+&lt;Button android:id=&quot;@+id/b1&quot; ... /&gt;
+</code></pre>
+
+			<pre><code class="java">
+// in fragment's Java file
+Button b = (Button) getActivity().findViewById(r.id.b1);
+b.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onClick(View view) {
+		// whatever code would have been in onClickB1
+	}
+});
+</code></pre>
+	</ul>
+</section>
+
+<section data-transition="fade-out">
+	<h1>Activity with parameters</h1>
+	
+	<pre><code class="java">
+public class <var>Name</var> extends Activity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.<var>name</var>);
+
+		// extract parameters passed to activity from intent
+		Intent intent = getIntent();
+		int <var>name1</var> = intent.getIntExtra("<var>id1</var>", <var>default</var>);
+		String <var>name2</var> = intent.getStringExtra("<var>id2</var>", "<var>default</var>");
+
+		// use parameters to set up the initial state
+		...
+	}
+}
+</code></pre>
+</section>
+
+<section data-transition="fade-in">
+	<h1>Fragment with parameters</h1>
+	
+	<pre><code class="java">
+public class <var>Name</var> extends <em>Fragment</em> {
+	@Override
+	protected void <em>onActivityCreated</em>(Bundle savedState) {
+		super.onActivityCreated(savedState);
+
+
+		// extract parameters passed to activity from intent
+		Intent intent = <em>getActivity()</em>.getIntent();
+		int <var>name1</var> = intent.getIntExtra("<var>id1</var>", <var>default</var>);
+		String <var>name2</var> = intent.getStringExtra("<var>id2</var>", "<var>default</var>");
+
+		// use parameters to set up the initial state
+		...
+	}
+}
+</code></pre>
+</section>
+
+<section>
+	<h1>Fragment communication</h1>
+	
+	<div class="figuresright">
+		<img src="images/fragment-2-tablet.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/fragment-2-tablet.png" alt="figure" />
+	</div>
+	
+	<ul>
+		<li>An activity can contain multiple fragments.
+		<li>The fragments can talk to each other.
+			<ul>
+				<li>use activity's <code>getFragmentManager</code> method
+				<li>its <code>findFragmentById</code> method can access any fragment that has an id
+				<li>write regular methods to communicate
+			</ul>
+	</ul>
+	
+	<pre><code class="java">
+Activity act = getActivity();
+if (act.getResources().getConfiguration().orientation ==
+		Configuration.ORIENTATION_LANDSCAPE) {
+	// update other fragment within this same activity
+	FragmentClass fragment = (FragmentClass)
+		act.<em>getFragmentManager().findFragmentById</em>(R.id.id);
+	fragment.<var>methodName</var>(<var>parameters</var>);
+}
+</code></pre>
+</section>
+
+<section>
+	<h1>Re-using layout with include</h1>
+	
+	<pre class="syntaxtemplate"><code class="xml">
+&lt;include layout=&quot;@layout/<var>name</var>&quot; /&gt;
+</code></pre>
+	
+	<ul>
+		<li>To use a layout in multiple places without a fragment, use the <code>include</code> tag in your XML.
+		<li>Similar to a fragment, but without its own lifecycle and event handling behavior.
+		<li>Example (uses a hypothetical layout in <span class="filename">content1.xml</span>):
+	</ul>
+	
+	<pre><code class="xml">
+&lt;!-- activity_example1.xml --&gt;
+&lt;LinearLayout ...&gt;
+	...
+	&lt;include layout=&quot;@layout/content1&quot; /&gt;
+</code></pre>
+	
+	<pre><code class="xml">
+&lt;!-- activity_example2.xml --&gt;
+&lt;RelativeLayout ...&gt;
+	...
+	&lt;include layout=&quot;@layout/content1&quot; /&gt;
+</code></pre>
+</section>
+
+<section>
+	<h1>Dynamically add a fragment</h1>
+	
+	<ul>
+		<li>You can add or remove a fragment from the screen dynamically in your activity's Java code:
+		<pre><code class="java">
+getFragmentManager().beginTransaction()
+	.add(R.id.<var>containerID</var>, <var>fragment</var>)
+	.commit();
+</code></pre>
+		
+		<li>Example:
+		<pre><code class="java">
+// in my activity class somewhere
+MyFragment frag = new MyFragment();
+getFragmentManager().beginTransaction()
+	.add(R.id.mycontainer, frag)
+	.commit();
+</code></pre>
+		
+		<li>related methods in fragment manager: <code>remove</code>, <code>replace</code>
+	</ul>
+</section>
+
+<section>
+	<h1>Fragment subclasses</h1>
+	
+	<ul>
+		<li><code class="androidapi" data-class="android.app.DialogFragment">DialogFragment</code> - Pops up on top of the current activity.
+		<li><code class="androidapi" data-class="android.app.ListFragment">ListFragment</code> - Shows list of items as its main content.
+		<li><code class="androidapi" data-class="android.app.PreferenceFragment">PreferenceFragment</code> - Allows user to change app settings.
+	</ul>
+
+	<div class="figureshorizontal">
+		<img src="images/dialogfragment-example-1.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/dialogfragment-example-1.png" alt="figure" />
+		<img src="images/list-custom-layout.jpg" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/list-custom-layout.jpg" alt="figure" />
+		<img src="images/preferencefragment-1.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/preferencefragment-1.png" alt="figure" />
+	</div>
+</section>
+
+<section>
+	<h1>
+		Lib: SimpleActivity
+		<img class="stanfordliblogo" src="images/stanford-logo-icon.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/stanford-logo-icon.png" alt="figure" />
+	</h1>
+	
+	<ul>
+		<li>Accessing fragments from a <code>SimpleActivity</code>:
+		
+		<pre><code class="java">
+Fragment myFrag = <em>findFragmentById</em>(R.id.<var>theId</var>);
+</code></pre>
+	</ul>
+	
+	<table class="methodtable">
+		<tr>
+			<th>Method</th>
+			<th>Description</th>
+		</tr>
+		
+		<tr>
+			<td><code>findFragment(<var>id</var>)</code> <br />
+<code>findFragmentById(<var>id</var>)</code></td>
+			<td>return fragment with the given ID</td>
+		</tr>
+		
+		<tr>
+			<td><code>addFragment(<var>containerID</var>, <br />&nbsp; <var>fragment</var>);</code></td>
+			<td>add a new fragment into the given view as its container</td>
+		</tr>
+		
+		<tr>
+			<td><code>removeFragment(<var>fragment</var>);</code></td>
+			<td>remove an existing fragment</td>
+		</tr>
+		
+		<tr>
+			<td><code>replaceFragment(<var>containerID</var>, <br />&nbsp; <var>fragment</var>);</code></td>
+			<td>replace a fragment with a new one</td>
+		</tr>
+		
+		<tr>
+			<td><code>hideFragment(<var>fragment</var>);</code></td>
+			<td>make a fragment invisible</td>
+		</tr>
+		
+		<tr>
+			<td><code>showFragment(<var>fragment</var>);</code></td>
+			<td>make a fragment visible</td>
+		</tr>
+	</table>
+</section>
+
+<section>
+	<h1>
+		Lib: <code class="androidapi" data-class="stanford.androidlib.SimpleFragment">SimpleFragment</code>
+		<img class="stanfordliblogo" src="images/stanford-logo-icon.png" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/images/stanford-logo-icon.png" alt="figure" />
+	</h1>
+	
+	<ul>
+		<li>If your app uses fragments, you can also have your fragments extend <code class="androidapi" data-class="stanford.androidlib.SimpleFragment">SimpleFragment</code>:
+	
+		<pre><code class="java">
+<strike>public class MyFragment extends Fragment {</strike>
+public class MyFragment <em>extends SimpleFragment</em> {
+</code></pre>
+
+		<li>Not a lot of functionality yet, but currently lets you access the <code>SimpleActivity</code> containing the fragment.
+		
+		<pre><code class="java">
+SimpleActivity act = <em>getSimpleActivity</em>();
+...
+</code></pre>
+	</ul>
+</section>
+
+<!-- END SLIDES AREA -->
+			</div>
+		</div>
+
+		<script src="highlightjs/highlight.pack.js" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/highlightjs/highlight.pack.js"></script>
+		<script src="cs193a-slides.js" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/cs193a-slides.js"></script>
+		<script src="reveal/js/reveal.js" tppabs="http://web.stanford.edu/class/cs193a/lectures/slides/reveal/js/reveal.js"></script>
+		<script>
+			initializeSlides();
+		</script>
+	</body>
+</html>

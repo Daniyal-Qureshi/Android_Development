@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teal_200"
+    android:orientation="vertical"
+    tools:context=".MadLibStory">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:gravity="center"
+        android:text="Your Mad Lib Story"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/str"
+        android:layout_width="match_parent"
+        android:layout_height="455dp"
+        android:paddingLeft="10dp"
+        android:scrollbars="vertical"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnr"
+        android:layout_width="235dp"
+        android:layout_height="82dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:onClick="another"
+        android:text="Make another Story"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:backgroundTint="?attr/colorButtonNormal" />
+</LinearLayout>

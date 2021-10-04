@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:title="Search"></item>
+    <item android:title="Upload"></item>
+    <item android:title="Copy"></item>
+    <item android:title="Print"></item>
+    <item android:title="Share"></item>
+    <item android:title="Bookmark"></item>
+
+
+</menu>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/watch"
+    >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="00:00:00"
+    android:textSize="70sp"
+    android:id="@+id/txt"
+    android:layout_centerInParent="true"
+
+    ></TextView>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/start"
+        android:textAllCaps="false"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="40dp"
+        android:padding="15dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:backgroundTint="#808080"
+        android:onClick="Start"
+        ></com.google.android.material.button.MaterialButton>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:id="@+id/stop"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:onClick="Stop"
+        android:textAllCaps="false"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="150dp"
+        android:padding="15dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:backgroundTint="#808080"
+        ></com.google.android.material.button.MaterialButton>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:textAllCaps="false"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="260dp"
+        android:padding="15dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:onClick="Reset"
+        android:backgroundTint="#808080"
+        ></com.google.android.material.button.MaterialButton>
+
+
+</RelativeLayout>

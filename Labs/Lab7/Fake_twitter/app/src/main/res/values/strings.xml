@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">Fake_twitter</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="billgates">
+
+<item>
+
+    Starship landing nominal!
+</item>
+        <item>
+
+        Falcon 9 \’s first stage has landed on the Of Course I Still Love You droneship – the 9th landing of this booster
+    </item>
+    <item> I was honored to speak at today \’s #LeadersClimateSummit about the three things we need to do to avoid a climate disaster. </item>
+<item> Ambitious short-term goals like this are critical to moving closer to a net-zero future. As we rapidly scale the solutions we have, we must also invest in innovation to reach our ultimate goals. Thank you
+@POTUS
+ for your leadership.</item>
+<item> It’s encouraging to see
+@POTUS
+ Biden and
+@ClimateEnvoy
+ Kerry re-establish America’s leading role on climate change. I look forward to joining leaders from around the world to talk about some of the most important challenges we need to overcome to avoid a climate disaster.</item>
+
+    </string-array>
+
+<string-array name="Mark">
+
+
+<item>
+
+    Starship landing nominal!
+</item>
+    <item> It’s encouraging to see
+@POTUS
+ Biden and
+@ClimateEnvoy
+ Kerry re-establish America’s leading role on climate change. I look forward to joining leaders from around the world to talk about some of the most important challenges we need to overcome to avoid a climate disaster.</item>
+
+
+    <item>
+
+        Falcon 9 \’s first stage has landed on the Of Course I Still Love You droneship – the 9th landing of this booster
+    </item>
+    <item>Excited about rolling out the new real-time stream home page to all FB. To everyone who has written in asking for it, you \'ll have it soon!</item>
+<item>I find it funny that it\'s on Digg that I\'m here. I \'m looking forward to when people can have unlimited connections on Facebook soon!</item>
+<item> So many interesting people are following me. I think I \'ll follow some of you guys as well.</item>
+</string-array>
+<string-array name="elon">
+
+    <item> SpaceX launching satellite Doge-1 to the moon next year
+
+– Mission paid for in Doge
+– 1st crypto in space
+– 1st meme in space
+</item>
+    <item>
+
+Cybertruck prototype in New York this weekend
+    </item>
+
+<item>
+
+    Starship landing nominal!
+</item>
+    <item>
+
+        Falcon 9 \’s first stage has landed on the Of Course I Still Love You droneship – the 9th landing of this booster
+    </item>
+    <item> It’s encouraging to see
+@POTUS
+ Biden and
+@ClimateEnvoy
+ Kerry re-establish America’s leading role on climate change. I look forward to joining leaders from around the world to talk about some of the most important challenges we need to overcome to avoid a climate disaster.</item>
+
+
+    <item> SpaceX launching satellite Doge-1 to the moon next year
+
+– Mission paid for in Doge
+– 1st crypto in space
+– 1st meme in space
+</item>
+
+    <item> SpaceX launching satellite Doge-1 to the moon next year
+
+– Mission paid for in Doge
+– 1st crypto in space
+– 1st meme in space
+</item>
+</string-array>
+
+
+
+</resources>
